@@ -95,7 +95,7 @@ class HomeController extends Controller {
      */
     public function edit($id)
     {
-        return view('pages.edit',['page'=>Page::find($id)]);
+        return view('pages.edit',['page'=>Page::find($id)]); 
     }
 
     /**
