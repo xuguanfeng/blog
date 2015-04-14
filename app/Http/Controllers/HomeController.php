@@ -2,6 +2,7 @@
 
 use App\Http\Models\Admin\Page;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller {
 
@@ -48,7 +49,7 @@ class HomeController extends Controller {
      */
     public function create()
     {
-        return view('pages.create');
+        return view('pages.create',["user"=>Auth::user()]);
     }
 
     /**
@@ -56,20 +57,13 @@ class HomeController extends Controller {
      *
      * @return Response
      */
-    public function store(Request $request)
+    public function store(StoreBlogPostRequest $request)
     {
-        //验证title和body
-        $this->validate($request, [
-//            'title' => 'required|unique:pages|max:255',
-            'title' => 'required|max:255',
-            'body' => 'required',
-        ]);
-
         //存储到DB
         $page = new Page;
         $page->title = $request->input('title');
         $page->body = $request->input('body');
-        $page->user_id = 1;
+        $page->user_id = $request->input('user_id');
         if($page->save()){
             return redirect()->to("/");
         }else{
@@ -95,7 +89,7 @@ class HomeController extends Controller {
      */
     public function edit($id)
     {
-        return view('pages.edit',['page'=>Page::find($id)]); 
+        return view('pages.edit',['page'=>Page::find($id)]);
     }
 
     /**

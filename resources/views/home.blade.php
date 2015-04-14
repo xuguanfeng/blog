@@ -18,7 +18,7 @@
                                         <h4>{{ $page->title }}</h4>
                                     </a></td>
                                 <td width="30%" align="right">
-                                    更新于：{{ substr($page->updated_at,0,16) }}
+                                    贴主：{{$pages->belongsToUser()->name}} 更新于：{{ substr($page->updated_at,0,16) }}
                                 </td>
                             </tr>
                         </table>

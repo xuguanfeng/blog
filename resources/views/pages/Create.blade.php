@@ -20,8 +20,9 @@
                             </div>
                         @endif
 
-                        <form action="{{ URL('admin/pages') }}" method="POST">
+                        <form action="{{ URL('/pages') }}" method="POST">
                             <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                            <input type="hidden" name="user_id" value="{{ $user->id }}">
                             <input type="text" name="title" class="form-control" required="required">
                             <br>
                             <textarea name="body" rows="10" class="form-control" required="required"></textarea>
