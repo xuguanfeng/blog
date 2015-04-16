@@ -14,6 +14,7 @@
 <body>
 
 <div class="container" style="margin-top: 20px;">
+    你好, {{Auth::user()->name}}<br/>
     @yield('content')
     <div id="footer" style="text-align: center; border-top: dashed 3px #eeeeee; margin: 50px 0; padding: 20px;">
         ©2015 <a href="http://baidu.com">Jo</a>

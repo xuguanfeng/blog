@@ -4,11 +4,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Page extends Model {
 
-	//
-    protected $table ="pages";
+//
+protected $table ="pages";
 
-    public function belongsToUser()
-    {
-        return $this->belongsTo('App\User','user_id','id');
-    }
+public function belongsToUser()
+{
+    return $this->belongsTo('App\User','user_id','id');
+}
 }

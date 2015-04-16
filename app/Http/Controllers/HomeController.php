@@ -3,6 +3,8 @@
 use App\Http\Models\Admin\Page;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
+use App\Http\Requests\StoreBlogPostRequest;
 
 class HomeController extends Controller {
 
@@ -36,10 +38,17 @@ class HomeController extends Controller {
 	{
 //		return view('home');
         $pages = DB::table("pages")->orderBy('updated_at', 'desc')->paginate(10);
+        $pageArray=array();
+        foreach ($pages as $page) {
+//            var_dump((Page) $page);
+            $pageArray[]=Page::find($page->id);
+        }
+
+//        var_dump($pages);
 //        $pages = Page::all();
 //        $pages = $pages->sortByDesc('updated_at');
         //return view('Home',["pages"=>Page::all()->sortByDesc('updated_at')->paginate(10)]);
-        return view('Home',["pages"=>$pages]);
+        return view('Home',["pages"=>$pages,"pageArray"=>$pageArray]);
 	}
 
     /**
@@ -57,7 +66,7 @@ class HomeController extends Controller {
      *
      * @return Response
      */
-    public function store(StoreBlogPostRequest $request)
+    public function store(Request $request)
     {
         //存储到DB
         $page = new Page;
@@ -79,6 +88,8 @@ class HomeController extends Controller {
      */
     public function show($id)
     {
+//        $page=Page::find($id);
+//        $user=$page->belongsToUser()->get();
         return view('pages.show',['page'=>Page::find($id)]);
     }
     /**
@@ -89,7 +100,13 @@ class HomeController extends Controller {
      */
     public function edit($id)
     {
-        return view('pages.edit',['page'=>Page::find($id)]);
+        $page = Page::find($id);
+        //权限判定
+//        if($page->user_id == Auth::user()->id){
+//            return view('pages.edit',['page'=>$page]);
+//        }
+//        abort(403);
+        return $page->user_id == Auth::user()->id ? view('pages.edit',['page'=>$page]) : abort(403);
     }
 
     /**
@@ -98,17 +115,21 @@ class HomeController extends Controller {
      * @param  int  $id
      * @return Response
      */
-    public function update(Request $request, $id)
+    public function update(StoreBlogPostRequest $request, $id)
     {
         //验证title和body
-        $this->validate($request, [
-//            'title' => 'required|unique:pages|max:255',
-            'title' => 'required|max:255',
-            'body' => 'required',
-        ]);
-
+//        $this->validate($request, [
+////            'title' => 'required|unique:pages|max:255',
+//            'title' => 'required|max:255',
+//            'body' => 'required',
+//        ]);
         //更新到DB
         $page = Page::find($id);
+        //权限判定
+        if($page->user_id !== Auth::user()->id){
+            abort(403);
+        }
+
         $page->title = $request->input('title');
         $page->body = $request->input('body');
         return $page->save() ? redirect()->to("/pages") :redirect()->back() ;

@@ -1,4 +1,4 @@
-@extends('_layouts.default')
+@extends('app')
 
 @section('content')
     <div id="title" style="text-align: center;">
@@ -9,23 +9,24 @@
     <div id="content">
         <ul>
             <a href="{{ URL('/pages/create') }}" class="btn btn-lg btn-primary">发帖</a><br>
-            @foreach ($pages as $page)
+            @foreach ($pageArray as $page)
                 <li style="margin: 50px 0;">
                     <div class="title">
                         <table width = "100%">
                             <tr>
-                                <td width="70%"><a href="{{ URL('pages/'.$page->id) }}">
-                                        <h4>{{ $page->title }}</h4>
+                                <td width="60%"><a href="{{ URL('pages/'.$page->id) }}">
+                                        <h4>{{ str_limit($page->title,20) }}</h4>
                                     </a></td>
-                                <td width="30%" align="right">
-                                    贴主：{{$pages->belongsToUser()->name}} 更新于：{{ substr($page->updated_at,0,16) }}
+                                <td width="40%" align="left">
+                                    贴主：{{$page->belongsToUser()->get()[0]->name}}&nbsp;
+                                    更新于：{{ substr($page->updated_at,0,16) }}
                                 </td>
                             </tr>
                         </table>
 
                     </div>
                     <div class="body">
-                        <p>{{ $page->body }}</p>
+                        <p>{{ str_limit($page->body,30) }}</p>
                     </div>
                 </li>
             @endforeach

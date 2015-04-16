@@ -1,6 +1,7 @@
 <?php namespace App\Http\Requests;
 
 use App\Http\Requests\Request;
+use App\Http\Models\Admin\Page;
 
 class StoreBlogPostRequest extends Request {
 
@@ -11,7 +12,13 @@ class StoreBlogPostRequest extends Request {
 	 */
 	public function authorize()
 	{
-		return false;
+//        var_dump($this->route("id"));
+//        $this->route("id");
+//        var_dump(Page::find(Request::input('id'))->user_id);
+//
+//        var_dump(Auth::user()->id);
+//        return Page::find(Request::input('id'))->user_id == Auth::user()->id;
+		return true;
 	}
 
 	/**
@@ -24,7 +31,6 @@ class StoreBlogPostRequest extends Request {
 		return [
             'title' => 'required|max:255',
             'body' => 'required',
-            'user_id' => 'required',
 		];
 	}
 
