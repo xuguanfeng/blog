@@ -51,4 +51,7 @@ Route::group(["prefix"=>"admin","namespace"=>"Admin","middleware"=>"auth"],funct
 
 });
 
+//blog的Restful页面
 Route::resource('/pages', 'HomeController');
+//发表回复
+Route::POST('/pages/postComment', 'HomeController@postComment');

@@ -90,7 +90,9 @@ class HomeController extends Controller {
     {
 //        $page=Page::find($id);
 //        $user=$page->belongsToUser()->get();
-        return view('pages.show',['page'=>Page::find($id)]);
+//        var_dump(Page::find($id)->hasManyComments()->get());
+        return view('pages.show',
+            ['page'=>Page::find($id), 'comments'=>Page::find($id)->hasManyComments()->get()]);
     }
     /**
      * Show the form for editing the specified resource.
@@ -133,5 +135,24 @@ class HomeController extends Controller {
         $page->title = $request->input('title');
         $page->body = $request->input('body');
         return $page->save() ? redirect()->to("/pages") :redirect()->back() ;
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @return Response
+     */
+    public function postComment(Request $request)
+    {
+        //存储到DB
+        $comment = new Comment;
+        $comment->body = $request->input('body');
+        $comment->user_id = $request->input('user_id');
+        $comment->page_id = $request->input('page_id');
+        if($comment->save()){
+            return redirect()->to("/");
+        }else{
+            return redirect()->back();
+        }
     }
 }

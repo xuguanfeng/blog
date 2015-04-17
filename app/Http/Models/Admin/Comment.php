@@ -2,18 +2,18 @@
 
 use Illuminate\Database\Eloquent\Model;
 
-class Page extends Model {
+class Comment extends Model {
 
-    //
-    protected $table ="pages";
+    protected $table ="comments";
 
     public function belongsToUser()
     {
         return $this->belongsTo('App\User','user_id','id');
     }
 
-    public function hasManyComments()
+    public function belongsToPage()
     {
-        return $this->hasMany('App\Http\Models\Admin\Comment','page_id','id');
+        return $this->belongsTo('App\Http\Models\Admin\Page','page_id','id');
     }
+
 }
