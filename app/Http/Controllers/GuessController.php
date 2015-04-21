@@ -1,13 +1,15 @@
 <?php namespace App\Http\Controllers;
 
-use App\Http\Models\Admin\Page;
-use App\Http\Models\Admin\Comment;
+//use App\Http\Models\Admin\Page;
+//use App\Http\Models\Admin\Comment;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
-use App\Http\Requests\StoreBlogPostRequest;
+use App\BusinessClasses\Guess\GuessNum;
+use App\Http\Models\Guess\Game;
+//use App\Http\Requests\StoreBlogPostRequest;
 
-class HomeController extends Controller {
+class GuessController extends Controller {
 
 	/*
 	|--------------------------------------------------------------------------
@@ -30,6 +32,36 @@ class HomeController extends Controller {
 		$this->middleware('auth');
 	}
 
+    /**
+     * Show the application dashboard to the user.
+     *
+     * @return Response
+     */
+    public function init(Request $request)
+    {
+        $game = new Game;
+        if($request->input("mode")=="0") {
+            //初始化模式 mode=0
+            $guess = new GuessNum();
+            $game->answer = $guess->randomAnswer();//随机4个数字
+            $game->user_id = Auth::user()->id;
+            //存储到DB
+            if ($game->save()) {
+                return view('guess.singleplay',["game"=>$game]);
+            } else {
+                return redirect()->back();
+            }
+        }
+
+        if($request->input("mode")=="-1") {
+            //认输 显示答案 mode=-1
+            $game = Game::find($request->input("gid"));
+            return $game->touch() ? view('guess.singleplay',["game"=>$game]) : redirect()->back();
+        }
+//        var_dump($pages);
+        return view('guess.singleplay',["game"=>$game]);
+    }
+
 	/**
 	 * Show the application dashboard to the user.
 	 *
@@ -37,19 +69,6 @@ class HomeController extends Controller {
 	 */
 	public function index()
 	{
-//		return view('home');
-        $pages = DB::table("pages")->orderBy('updated_at', 'desc')->paginate(10);
-        $pageArray=array();
-        foreach ($pages as $page) {
-//            var_dump((Page) $page);
-            $pageArray[]=Page::find($page->id);
-        }
-
-//        var_dump($pages);
-//        $pages = Page::all();
-//        $pages = $pages->sortByDesc('updated_at');
-        //return view('Home',["pages"=>Page::all()->sortByDesc('updated_at')->paginate(10)]);
-        return view('Home',["pages"=>$pages,"pageArray"=>$pageArray]);
 	}
 
     /**

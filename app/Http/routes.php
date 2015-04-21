@@ -55,3 +55,12 @@ Route::group(["prefix"=>"admin","namespace"=>"Admin","middleware"=>"auth"],funct
 Route::resource('/pages', 'HomeController');
 //发表回复
 Route::POST('/pages/postComment', 'HomeController@postComment');
+//删除回复
+Route::GET('/pages/deleteComment/{commentId}', 'HomeController@deleteComment');
+
+
+/**
+ * 猜数字的页面迁移
+ */
+Route::GET('/guess/', 'GuessController@init');
+Route::GET('/guess/singleplay/', 'GuessController@init');
