@@ -5,8 +5,10 @@
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use App\BusinessClasses\Guess\GuessNum;
 use App\Http\Models\Guess\Game;
+use App\Http\Models\Guess\GuessHistory;
 //use App\Http\Requests\StoreBlogPostRequest;
 
 class GuessController extends Controller {
@@ -43,7 +45,7 @@ class GuessController extends Controller {
         if($request->input("mode")=="0") {
             //初始化模式 mode=0
             $guess = new GuessNum();
-            $game->answer = $guess->randomAnswer();//随机4个数字
+            $game->answer = $guess->finalAnswer;//随机4个数字
             $game->user_id = Auth::user()->id;
             //存储到DB
             if ($game->save()) {
@@ -62,6 +64,32 @@ class GuessController extends Controller {
         return view('guess.singleplay',["game"=>$game]);
     }
 
+    /**
+     * Show the application dashboard to the user.
+     *
+     * @return Response
+     */
+    public function guess(Request $request)
+    {
+        $game = Game::find($request->input("game_id"));
+        $number = $request->input("guessNum");
+        $gn = new GuessNum();
+        $result=$gn->matchAnswer($game->answer,$number);
+        $gh = new GuessHistory();
+        $gh->user_id = Auth::user()->id;
+        $gh->game_id = $game->id;
+        $gh->number=$number;
+        $gh->result=$result;
+        //todo 取得最大count,
+        $gh->count=1;
+        $gh->save();
+        $response = array(
+            'status' => 'success',
+            'result' => $result,
+        );
+
+        return response()->json( $response );
+    }
 	/**
 	 * Show the application dashboard to the user.
 	 *

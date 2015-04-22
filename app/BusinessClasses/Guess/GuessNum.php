@@ -10,6 +10,15 @@ use PhpParser\Node\Expr\Cast\Array_;
 
 class GuessNum {
 
+    public $allNumMap;
+    public $finalAnswer;
+
+    public function __construct()
+    {
+        $this->allNumMap = $this->initMap();
+        $this->finalAnswer = $this->randomAnswer();
+    }
+
     //判定是否有重复数字
     public function isDuplicated($num){
         if($num == null || strlen($num) !== 4){
@@ -44,9 +53,30 @@ class GuessNum {
         }
         return $rtnStr;
     }
+
+    //生成一个4位随机数（没有重复）
+    public function matchAnswer($finalAnswer,$guessNum){
+        $a=0;
+        $b=0;
+        for($i=0;$i<4;$i++){
+            $subNum=substr($guessNum,$i,1);
+            if(strpos($finalAnswer,$subNum) === false){
+                continue;
+            }
+            strpos($finalAnswer,$subNum) ===$i?$a++:$b++;
+//            if(strpos($this->finalAnswer,$subNum)){
+//
+//            }else{
+//
+//            }
+        }
+        return $a."A".$b."B";
+    }
 }
 
 $g = new GuessNum();
+//var_dump($g->finalAnswer);
+//echo $g->matchAnswer($g->finalAnswer,1234);
 //var_dump($g->isDuplicated("1234"));
 //var_dump($g->initMap());
 //var_dump($g->randomAnswer());

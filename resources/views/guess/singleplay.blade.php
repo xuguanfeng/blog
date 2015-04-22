@@ -39,10 +39,22 @@
     </div>
 
     <hr>
-    <div id="content" style="padding: 10px; padding: 10px;">
-        <p>
-            {{--{{ $page->body }}--}}
-        </p>
+    <div id="content" style="padding: 10px; padding: 10px; width: 30%" >
+        @for ($i = 0; $i < 10; $i++)
+            <p>
+                <form action="{{ URL('/guess/guessnumber') }}" method="POST" id={{"form"}}>
+                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                    <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
+                    <input type="hidden" name="game_id" value="{{ $game->id }}">
+                    <input type="text" name="guessNum" ="guessNum" class="form-control-static" maxlength="4" size="12" required="required"  value="">
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <div class="btn btn-info"id={{"btn"}}>猜</div>
+                {{--<button class="btn btn-lg btn-info" id=id={{"btn".$i}} >猜</button>--}}
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <div class="badge"id={{"label"}}>?A?B</div>
+            </form>
+            </p>
+        @endfor
     </div>
     {{--@foreach ($comments as $comment)--}}
         {{--<hr>--}}
