@@ -102,7 +102,7 @@ $(document).ready(function () {
         //var formParam = $("#form0").serialize();//序列化表格内容为字符串
         $.ajax({
             type: 'get',
-            url: '/guess/bbautoguess',
+            url: '/guess/autoguess',
             data: 'finalAnswer=' + $("#finalAnswer").val(),
             cache: false,
             dataType: 'json',
@@ -112,8 +112,8 @@ $(document).ready(function () {
             },
             success: function (data) {
                 for (i = 0; i < 10; i++) {
-                    $("[id^=pclabel]").eq(i).text();
-                    $("[name^=pcguessNum]").eq(i).val();
+                    $("[id^=pclabel]").eq(i).text(data.res[i]);
+                    $("[name^=pcguessNum]").eq(i).val(data.num[i]);
                     $("[name^=pcguessNum]").eq(i).attr("disabled", true);
                 }
             }

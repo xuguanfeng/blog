@@ -113,7 +113,7 @@ class GuessController extends Controller
 //        var_dump($gn->autoPlayRecord);
         $response = array(
             'status' => 'success',
-            'result' => $gn->autoPlayRecord,
+            'result' => array("num"=>array_keys($gn->autoPlayRecord),"res"=>array_values($gn->autoPlayRecord))
         );
         return response()->json($response);
 
