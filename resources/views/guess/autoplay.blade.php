@@ -16,7 +16,7 @@
 
     <hr>
     <div id="content" style="padding: 10px; padding: 10px; width: 40%">
-        @for ($i = 0; $i < 10; $i++)
+        @for ($i = 0; $i < 20; $i++)
             <p>
             <form action="" method="POST" id={{"form"}}>
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">

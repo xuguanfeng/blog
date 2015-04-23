@@ -99,6 +99,12 @@ $(document).ready(function () {
      用户指定数字，电脑来猜
      */
     $("#pcplay").click(function () {
+        //初期化输入框和标签
+        $("[id^=pclabel]").hide();
+        $("[name^=pcguessNum]").hide();
+        $("[id^=pclabel]").text("");
+        $("[id^=pclabel]").css({"background-color": "#000000", "color": "white"});
+        $("[name^=pcguessNum]").val("");
         //alert(index);
         if (!isLegalNum($("#finalAnswer").val())) {
             $("#illegalNum").text("请重新输入");
@@ -123,7 +129,7 @@ $(document).ready(function () {
                 alert('error');
             },
             success: function (data) {
-                for (i = 0; i < 10; i++) {
+                for (i = 0; i < 20; i++) {
                     $("[id^=pclabel]").eq(i).show();
                     $("[name^=pcguessNum]").eq(i).show();
                     $("[id^=pclabel]").eq(i).text(data.result.res[i]);
@@ -131,6 +137,10 @@ $(document).ready(function () {
                     $("[name^=pcguessNum]").eq(i).attr("disabled", true);
                     if(data.result.res[i]=="4A0B"){
                         $("[id^=pclabel]").eq(i).css({"background-color": "#98bf21", "color": "white"});
+                        for(j=i+1;j<20;j++){
+                            $("[id^=pclabel]").eq(j).hide();
+                            $("[name^=pcguessNum]").eq(j).hide();
+                        }
                         return;
                     }
                 }
