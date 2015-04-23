@@ -19,6 +19,7 @@
     {{--</h4>--}}
 {{--    {{ var_dump($game->updated_at)}}--}}
     <h1 style="text-align: center; padding: 10px;">
+        <div id="answerDiv">
         @if ($game->answer == null)
             请初始游戏
         @elseif($game->created_at == $game->updated_at)
@@ -26,27 +27,34 @@
         @else
             再接再厉，答案是<br/>{{$game->answer}}
         @endif
+        </div>
 
     </h1>
     <div id="date" style="text-align: right; padding: 10px;">
+
+        &nbsp;&nbsp;<a id="newGameLink" href="{{ URL('guess/singleplay/?mode=0') }}" class="">初始游戏</a>
+        &nbsp;&nbsp;<a id="showAnswerLink" href="{{ URL('guess/singleplay/?mode=-1&gid='.$game->id) }}" class="">认输，看答案</a>
         @if ($game->answer == null)
-            &nbsp;&nbsp;<a href="{{ URL('guess/singleplay/?mode=0') }}" class="">初始游戏</a>
+            {{--需要初始化--}}
+            <input type="hidden" id="mode" value="0">
         @elseif($game->created_at == $game->updated_at)
-            &nbsp;&nbsp;<a href="{{ URL('guess/singleplay/?mode=-1&gid='.$game->id) }}" class="">认输，看答案</a>
+            {{--已经初始化--}}
+            <input type="hidden" id="mode" value="1">
         @else
-            &nbsp;&nbsp;<a href="{{ URL('guess/singleplay/?mode=0') }}" class="">初始游戏</a>
+            {{--认输--}}
+            <input type="hidden" id="mode" value="-1">
         @endif
     </div>
 
     <hr>
-    <div id="content" style="padding: 10px; padding: 10px; width: 30%" >
+    <div id="content" style="padding: 10px; padding: 10px; width: 40%" >
         @for ($i = 0; $i < 10; $i++)
             <p>
-                <form action="{{ URL('/guess/guessnumber') }}" method="POST" id={{"form"}}>
+                <form action="" method="POST" id={{"form"}}>
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                     <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
                     <input type="hidden" name="game_id" value="{{ $game->id }}">
-                    <input type="text" name="guessNum" ="guessNum" class="form-control-static" maxlength="4" size="12" required="required"  value="">
+                    <input type="text" name="guessNum" class="form-control-static" maxlength="4" size="12" required="required"  value="">
                 &nbsp;&nbsp;&nbsp;&nbsp;
                 <div class="btn btn-info"id={{"btn"}}>猜</div>
                 {{--<button class="btn btn-lg btn-info" id=id={{"btn".$i}} >猜</button>--}}

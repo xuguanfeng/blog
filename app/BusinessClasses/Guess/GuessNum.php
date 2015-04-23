@@ -12,11 +12,13 @@ class GuessNum {
 
     public $allNumMap;
     public $finalAnswer;
+    public $autoPlayRecord;
 
     public function __construct()
     {
         $this->allNumMap = $this->initMap();
         $this->finalAnswer = $this->randomAnswer();
+        $this->autoPlayRecord=Array();
     }
 
     //判定是否有重复数字
@@ -54,7 +56,7 @@ class GuessNum {
         return $rtnStr;
     }
 
-    //生成一个4位随机数（没有重复）
+    //匹配?A?B
     public function matchAnswer($finalAnswer,$guessNum){
         $a=0;
         $b=0;
@@ -64,18 +66,39 @@ class GuessNum {
                 continue;
             }
             strpos($finalAnswer,$subNum) ===$i?$a++:$b++;
-//            if(strpos($this->finalAnswer,$subNum)){
-//
-//            }else{
-//
-//            }
         }
         return $a."A".$b."B";
     }
+
+    /*
+     * 根据数字和提示自动算出最终答案
+     * 一共有5040种答案的排列组合，每一个都和数字进行匹配，剔除和提示不同的排列组合
+     */
+    public function autoPlay($finalAnswer,$allNumMap){
+        //随机选择一组数字
+        $rdmNum=array_keys($allNumMap)[rand(0,count($allNumMap)-1)];
+        //随机数字的答案
+        $tmpResult=$this->matchAnswer($finalAnswer,$rdmNum);
+        //记录过程
+        $this->autoPlayRecord[$rdmNum]=$tmpResult;
+        //如果猜中了则返回
+        if($tmpResult=="4A0B"){
+            return ;
+        }
+        //排除所有和随机数字答案不一样的排列组合
+        foreach($allNumMap as $k=>$v){
+            if($this->matchAnswer($k,$rdmNum) !=$tmpResult){
+                unset($allNumMap[$k]);
+            }
+        }
+        //递归
+        $this->autoPlay($finalAnswer,$allNumMap);
+    }
 }
 
-$g = new GuessNum();
-//var_dump($g->finalAnswer);
+//$g = new GuessNum();
+//$g->autoPlay(1234,$g->allNumMap);
+//var_dump($g->autoPlayRecord);
 //echo $g->matchAnswer($g->finalAnswer,1234);
 //var_dump($g->isDuplicated("1234"));
 //var_dump($g->initMap());

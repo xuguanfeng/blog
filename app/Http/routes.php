@@ -65,3 +65,5 @@ Route::GET('/pages/deleteComment/{commentId}', 'HomeController@deleteComment');
 Route::GET('/guess/', 'GuessController@init');
 Route::GET('/guess/singleplay/', 'GuessController@init');
 Route::POST('/guess/guessnumber/', 'GuessController@guess');
+Route::GET('/guess/autoplay/', 'GuessController@initPc');
+Route::GET('/guess/autoguess/', 'GuessController@autoPlay');
