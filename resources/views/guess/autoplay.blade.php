@@ -10,7 +10,7 @@
         <label class="" id="illegalNum"></label>
 
         <div class="btn btn-lg btn-info" id="pcplay">电脑开猜</div>
-        <a href="{{ URL('/guess/autoguess?finalAnswer=1234')}}">1234guess</a>
+{{--        <a href="{{ URL('/guess/autoguess?finalAnswer=1234')}}">1234guess</a>--}}
 
     </h1>
 

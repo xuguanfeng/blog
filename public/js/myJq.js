@@ -2,6 +2,10 @@
  * Created by xuguanfeng on 2015/04/22.
  */
 $(document).ready(function () {
+    //电脑猜的初期化，把输入框和标签都隐藏
+    $("[id^=pclabel]").hide();
+    $("[name^=pcguessNum]").hide();
+
     //alert($("#mode").val());
     if ($("#mode").val() == "1") {
         //已经初始化，显示输入框,只显示认输link
@@ -83,6 +87,14 @@ $(document).ready(function () {
         return true;
     }
 
+    //重新绑定回车提交的事件
+    //电脑猜
+    $("#finalAnswer").keypress(function (e) {
+        if (e.keyCode == 13) {
+            e.preventDefault();
+            $("#pcplay").trigger("click");
+        }
+    });
     /*
      用户指定数字，电脑来猜
      */
@@ -98,7 +110,7 @@ $(document).ready(function () {
             $("#illegalNum").text("");
             $("#finalAnswer").css("form-control-static");
         }
-        alert($("#finalAnswer").val());
+        //alert($("#finalAnswer").val());
         //var formParam = $("#form0").serialize();//序列化表格内容为字符串
         $.ajax({
             type: 'get',
@@ -112,9 +124,15 @@ $(document).ready(function () {
             },
             success: function (data) {
                 for (i = 0; i < 10; i++) {
-                    $("[id^=pclabel]").eq(i).text(data.res[i]);
-                    $("[name^=pcguessNum]").eq(i).val(data.num[i]);
+                    $("[id^=pclabel]").eq(i).show();
+                    $("[name^=pcguessNum]").eq(i).show();
+                    $("[id^=pclabel]").eq(i).text(data.result.res[i]);
+                    $("[name^=pcguessNum]").eq(i).val(data.result.num[i]);
                     $("[name^=pcguessNum]").eq(i).attr("disabled", true);
+                    if(data.result.res[i]=="4A0B"){
+                        $("[id^=pclabel]").eq(i).css({"background-color": "#98bf21", "color": "white"});
+                        return;
+                    }
                 }
             }
         });
