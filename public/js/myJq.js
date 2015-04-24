@@ -129,7 +129,7 @@ $(document).ready(function () {
                 alert('error');
             },
             success: function (data) {
-                for (i = 0; i < 20; i++) {
+                for (i = 0; i < data.result.res.length; i++) {
                     $("[id^=pclabel]").eq(i).show();
                     $("[name^=pcguessNum]").eq(i).show();
                     $("[id^=pclabel]").eq(i).text(data.result.res[i]);
@@ -137,10 +137,13 @@ $(document).ready(function () {
                     $("[name^=pcguessNum]").eq(i).attr("disabled", true);
                     if(data.result.res[i]=="4A0B"){
                         $("[id^=pclabel]").eq(i).css({"background-color": "#98bf21", "color": "white"});
-                        for(j=i+1;j<20;j++){
-                            $("[id^=pclabel]").eq(j).hide();
-                            $("[name^=pcguessNum]").eq(j).hide();
-                        }
+                        //for(j=i+1;j<20;j++){
+                            //$("[id^=pclabel]").eq(j).hide();
+                            //$("[name^=pcguessNum]").eq(j).hide();
+                        //}
+                        //i以后的输入框和标签全部隐藏
+                        $("[id^=pclabel]:gt("+i+")").hide();
+                        $("[name^=pcguessNum]:gt("+i+")").hide();
                         return;
                     }
                 }
