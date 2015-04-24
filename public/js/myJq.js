@@ -103,7 +103,7 @@ $(document).ready(function () {
         $("[id^=pclabel]").hide();
         $("[name^=pcguessNum]").hide();
         $("[id^=pclabel]").text("");
-        $("[id^=pclabel]").css({"background-color": "#000000", "color": "white"});
+        $("[id^=pclabel]").css({"background-color": "#777777", "color": "white"});
         $("[name^=pcguessNum]").val("");
         //alert(index);
         if (!isLegalNum($("#finalAnswer").val())) {
